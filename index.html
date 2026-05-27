@@ -118,6 +118,9 @@
             <li><strong>Design</strong> — concept, deliverables, and budgeting.</li>
             <li><strong>Deliver</strong> — review, launch, and team enablement.</li>
           </ol>
+          <div class="field">
+          <div class="g-recaptcha" data-sitekey="6LcpNf8sAAAAAPVqObRtqp5wo0dqqz0zRJkTq1tv"></div>
+          </div>
           <ul class="actions">
             <li><a href="#contact" class="button primary scrolly">Book a Discovery Session</a></li>
           </ul>
@@ -196,6 +199,7 @@
     <script src="assets/js/breakpoints.min.js"></script>
     <script src="assets/js/util.js"></script>
     <script src="assets/js/main.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -206,7 +210,13 @@
       // Form submission handler
       document.getElementById('contact-form').addEventListener('submit', function(e) {
         e.preventDefault();
-        
+        // Require reCAPTCHA before sending
+        const recaptchaToken = grecaptcha.getResponse();
+        if (!recaptchaToken) {
+        errorMessage.textContent = 'Please confirm you are not a robot.';
+        errorMessage.style.display = 'block';
+        return;
+        }
         // Get form elements
         const submitBtn = document.getElementById('submitBtn');
         const loader = document.getElementById('loader');
@@ -229,6 +239,7 @@
             // Success
             loader.style.display = 'none';
             successMessage.style.display = 'block';
+            grecaptcha.reset();
             
             // Reset form
             document.getElementById('contact-form').reset();
